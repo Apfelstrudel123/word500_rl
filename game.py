@@ -3,20 +3,22 @@ from data_loader import sampleWord
 MAX_ATTEMPTS = 8
 
 class Game:
-    def __init__(self, data):
+    def __init__(self, data, verbose=True):
+        self.verbose = verbose
         self.words = data
         self.solution = sampleWord(data)
         self.word_len = len(self.solution)
         self.attempts = 0
         self.finished = False
-        print(self.solution)
+        if self.verbose:
+            print("New Game with solution:", self.solution)
 
     def getRemainingAttempts(self):
         return MAX_ATTEMPTS - self.attempts
 
     def evalWord(self, word):
         if len(word) != self.word_len:
-            print("Error: Word length mismatch.")
+            print("Error: Word length mismatch:", word)
             return False, 0, 0, 0
         if self.finished:
             print("Error: Word evaluated after game has ended.")
@@ -24,7 +26,7 @@ class Game:
 
         word = word.lower()
         if word not in self.words:
-            print("Error: Word unknown.")
+            print("Error: Word unknown:", word)
             return False, 0, 0, 0
         
         self.attempts += 1
@@ -62,26 +64,11 @@ class Game:
             else:
                 num_red += 1
 
-        #index = 0
-        #for char in word:
-        #    if char not in self.solution:
-        #        num_red += 1
-        #    elif char == self.solution[index]:
-        #        if index in chars_used:
-        #            num_yellow -= 1
-        #        else:
-        #            chars_used.append(index)
-        #        num_green += 1
-        #    else:
-        #        num_yellow += 1
-        #        chars_used.append(index)
-        #    index += 1
-
         if num_green == self.word_len:
-            print("Game solved! Solution was: ", self.solution)
+            print("Game solved! Solution was:", self.solution)
             self.finished = True
         elif self.finished:
-            print("Game lost! Solution was: ", self.solution)
+            print("Game lost! Solution was:", self.solution)
 
         return True, num_red, num_yellow, num_green
         
